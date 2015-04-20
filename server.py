@@ -25,7 +25,7 @@ class get_jobs:
 	def GET(self):
 		web.header('Content-Type', 'application/json')
 		try:
-			return json.dumps(db.select('job').list())
+			return json.dumps(db.select('jobs').list())
 		except:
 			return json.dumps({'status': 'error'})
 
@@ -34,7 +34,7 @@ class add_job:
 	def GET(self):
 		web.header('Content-Type', 'application/json')
 		g = web.input(name="None", address="None", phone="", notes="", lastUpdated=None)
-		db.insert('job', job=g.name, address=g.address, phone=g.phone, notes=g.notes, lastUpdated=g.lastUpdated)
+		db.insert('jobs', job=g.name, address=g.address, phone=g.phone, notes=g.notes, lastUpdated=g.lastUpdated)
 		return json.dumps({'status': 'success'})
 
 # Get a specific job by name
@@ -42,7 +42,7 @@ class get_job:
 	def GET(self, job):
 		web.header('Content-Type', 'application/json')
 		try:
-			return json.dumps(db.select('job', where="name=\"" + job + "\"").list())
+			return json.dumps(db.select('jobs', where="name=\"" + job + "\"").list())
 		except:
 			return json.dumps({'status': 'error'})
 
@@ -53,8 +53,8 @@ class edit_job:
 		g = web.input(name, address, phone, notes, lastUpdated, id)
 		print g.id, g.name
 		try:
-			db.delete('job', where="id=\"" + g.id + "\"")
-			db.insert('job', id=g.id, job=g.name, address=g.address, phone=g.phone, notes=g.notes, lastUpdated=g.lastUpdated)
+			db.delete('jobs', where="id=\"" + g.id + "\"")
+			db.insert('jobs', id=g.id, job=g.name, address=g.address, phone=g.phone, notes=g.notes, lastUpdated=g.lastUpdated)
 			return json.dumps({'status': 'success'})
 		except:
 			return json.dumps({'status': 'error'})
@@ -67,7 +67,7 @@ class delete_job:
 		g = web.input(id=-1)
 		print "deleting: " + g.id
 		try:
-			db.delete('job', where="id=\"" + g.id + "\"")
+			db.delete('jobs', where="id=\"" + g.id + "\"")
 			return json.dumps({'status': 'success'})
 		except:
 			return json.dumps({'status': 'error'})
