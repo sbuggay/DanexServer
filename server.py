@@ -1,6 +1,6 @@
 # DAN-EX server
 
-import web, time, json
+import sys, os, web, time, json
 
 urls = (
 	'/options', 'options',
@@ -25,9 +25,10 @@ class get_jobs:
 	def GET(self):
 		web.header('Content-Type', 'application/json')
 		try:
-			return json.dumps(db.select('jobs').list())
+			return json.dumps({'status': 'success', 'jobs': db.select('jobs').list()})
 		except:
-			return json.dumps({'status': 'error'})
+			e = sys.exc_info()[0]
+			return json.dumps({'status': 'error', 'message': 'Error: %s' % e})
 
 # Add a job, defaults are None
 class add_job:
@@ -44,7 +45,8 @@ class get_job:
 		try:
 			return json.dumps(db.select('jobs', where="name=\"" + job + "\"").list())
 		except:
-			return json.dumps({'status': 'error'})
+			e = sys.exc_info()[0]
+			return json.dumps({'status': 'error', 'message': 'Error: %s' % e})
 
 # Edit a job by name, cannot change the name
 class edit_job:
